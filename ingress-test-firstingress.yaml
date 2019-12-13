@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: ingress-test
+spec:
+  rules:
+  - host: www.k8stest.com
+    http:
+      paths:
+      - backend:
+          serviceName: ingress-test-service
+          servicePort: 80
