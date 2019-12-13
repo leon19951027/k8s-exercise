@@ -15,11 +15,13 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
+
 #yum安装
+
 yum -y install kubeadm-1.15.1-0 kubelet-1.15.1-0 kubectl-1.15.1-0
 
-##拉取必要镜像
 
+#拉镜像
 for i in `kubeadm config images list`; do
     imageName=${i#k8s.gcr.io/}
     docker pull registry.aliyuncs.com/google_containers/$imageName
