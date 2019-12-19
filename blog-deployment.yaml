@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-deplyment
+  namespace: solo-blog
+spec:
+  selector:
+    matchLabels:
+      app: blog
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blog
+    spec:
+      containers:
+      - name: blog-containner
+        image: b3log/solo
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: RUNTIME_DB
+          value: "mysql"
+        - name: JDBC_USERNAME
+          value: "root"
+        - name: JDBC_PASSWORD
+          value: "123456"
+        - name: JDBC_DRIVER
+          value: "com.mysql.cj.jdbc.Driver"
+        - name: JDBC_URL
+          value: "jdbc:mysql://mysql-headless.solo-blog.svc.cluster.local:3306/solo?useUnicode=yes&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC"
+        ports:
+        - name: web
+          containerPort: 80
+          hostPort: 80
+          protocol: TCP
+			  volumeMounts:
+        - mountPath: /opt/solo/latke.properties
+          name: conf
+          subPath: latke.properties
+      volumes:
+      - name: conf
+        hostPath:
+          path: /solo/
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: type
+                operator: In
+                values:
+                - cpu
