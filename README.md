@@ -190,7 +190,7 @@ spec:
       - name: conf
         hostPath:
           path: /solo/
-			affinity:
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
